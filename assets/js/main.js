@@ -459,7 +459,8 @@ var customAllOrder = [
 // ===== START: PORTFOLIO FILTER + LOAD MORE + CUSTOM SORT LOGIC ===================
 // =================================================================================
 
-$(window).on('load', function() {
+// $(window).on('load', function() {
+$(document).ready(function() {
 
     // Check if the portfolio container exists
     if ($.exists(".cs_isotop_items_details")) {
