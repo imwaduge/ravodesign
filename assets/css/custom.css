@@ -1,0 +1,1323 @@
+/* --- Ravo Design Custom Stylesheet --- */
+
+/* 1. Services Section: Desktop Hover + Mobile Accordion සකස් කිරීම */
+/* ================================================================= */
+
+/* Desktop එකේ hover වන සේවාව highlight කිරීම */
+#interactive-services li h3 {
+  opacity: 0.6; 
+  transition: opacity 0.4s ease;
+}
+
+#interactive-services li.active h3,
+#interactive-services li:hover h3 {
+  opacity: 1; 
+}
+
+/* Mobile එකට පමණක් අදාළ content සහ icon එක Desktop එකේදී සඟවා තැබීම */
+.service-content,
+.plus-icon {
+  display: none;
+}
+
+/* Desktop එකේ දකුණු පස ඇති Description box එක */
+#service-description ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+}
+
+#service-description li {
+  margin-bottom: 8px;
+}
+
+/* Sub-service list එකේ bullet point එකට custom style එකක් */
+#service-description li::before {
+    content: "•";
+    color: #e63946; /* Accent color එක */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* ===== Mobile & Tablet Styles (තිරය 991px වලට වඩා කුඩා විට) ===== */
+@media (max-width: 991px) {
+  
+  /* Desktop එකේ පමණක් ඇති දකුණු පස image box එක සඟවා තැබීම */
+  .cs_service_exploring_2 {
+    display: none;
+  }
+
+  /* Main container එකේ properties */
+  .cs_service_exploring_1 {
+    width: 100%;
+  }
+
+  /* List items අතර border එකක් යෙදීම */
+  #interactive-services li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  #interactive-services li:last-child {
+    border-bottom: none;
+  }
+  /* Mobile එකේදී fade effect එක අයින් කිරීම */
+  #interactive-services li h3 {
+     opacity: 1; 
+  }
+
+  /* Click කළ හැකි header එක style කිරීම */
+  .service-header {
+    width: 100%;                          
+    display: flex;
+    justify-content: space-between; /* Items දෙක දෙපැත්තට align කිරීම */
+    align-items: center;                  
+    cursor: pointer;
+    padding: 20px 0;
+  }
+
+  .service-header h3 {
+    margin-bottom: 0; /* h3 tag එකේ default margin එක අයින් කිරීම */
+  }
+  
+  /* Expand වන content එක (JS මගින් display වෙනස් කරනු ලබයි) */
+  .service-content {
+    display: none;
+    padding: 0px 15px 25px 15px;
+    text-align: center; 
+  }
+  
+  .service-content img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+
+  /* Sub-services list එක වමට align කිරීම */
+  .servicecontentsub {
+    text-align: left;
+    margin-top: 15px;
+  }
+  /* Sub-services list එකේ style එක */
+  .servicecontentsub ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+  }
+  .servicecontentsub li {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 5px;
+  }
+  /* Sub-services වලට උඩින් ඇති topic එක style කිරීම */
+  .servicecontentsubtopic {
+    text-align: center; 
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  /* Plus/Minus icon එක style කිරීම */
+  .plus-icon {
+    display: block; /* Mobile එකේ පමණක් පෙන්වීමට */
+    position: relative;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-left: 20px; 
+  }
+
+  /* Icon එකේ ඉරි දෙක නිර්මාණය කිරීම */
+  .plus-icon::before, 
+  .plus-icon::after {
+    content: '';
+    position: absolute;
+    background-color: var(--heading-color);
+    transition: transform 0.3s ease-in-out;
+  }
+  .plus-icon::before {
+    width: 100%;
+    height: 2px;
+    top: 50%;
+    margin-top: -1px;
+  }
+  .plus-icon::after {
+    width: 2px;
+    height: 100%;
+    left: 50%;
+    margin-left: -1px;
+  }
+  
+  /* active වන විට '-' ලකුණ සෑදීම */
+  #interactive-services li.active .plus-icon::after {
+    transform: rotate(90deg);
+  }
+}
+
+/* 2. Portfolio Section: Hover Effect සහ Mobile Fixes */
+/* ======================================================= */
+
+.portfoliocenter {
+  align-items: center;
+  text-align: center;
+  align-content: center;
+}
+
+/* Portfolio Card Container එක සකස් කිරීම */
+.cs_portfolio.cs_style_1 {
+  position: relative;
+  overflow: hidden; /* Box එක පිටතට පනින එක වැළැක්වීමට */
+}
+
+/* Text Box එක (.cs_portfolio_info) style කිරීම */
+.cs_portfolio.cs_style_1 .cs_portfolio_info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(16, 16, 16, 0.85); /* Semi-transparent කළු පාට */
+  backdrop-filter: blur(5px); /* Glass effect (Optional) */
+  -webkit-backdrop-filter: blur(5px);
+  padding: 25px 30px;
+  opacity: 0;
+  transform: translateY(100%); /* සම්පූර්ණයෙන්ම පහළට යැවීම */
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Hover State: Box එක උඩට ගෙන ඒම */
+.cs_portfolio.cs_style_1:hover .cs_portfolio_info {
+  opacity: 1;
+  transform: translateY(0); /* නැවත මුල් තැනට ගෙන ඒම (Slide up) */
+}
+
+/* Text color එක සුදු කිරීම */
+.cs_portfolio.cs_style_1 .cs_portfolio_title,
+.cs_portfolio.cs_style_1 .cs_portfolio_subtitle {
+  color: #FFFFFF !important;
+}
+
+.cs_portfolio.cs_style_1 .cs_portfolio_subtitle {
+  opacity: 0.8; /* Subtitle එක මඳක් fade කිරීම (optional) */
+}
+
+/* අනවශ්‍ය default overlay එක සඟවා තැබීම */
+.cs_portfolio.cs_style_1 .cs_portfolio_overlay {
+  background-color: transparent !important;
+}
+
+/* Mobile එකේ stretch වන portfolio images නිවැරදි කිරීම */
+@media (max-width: 767px) {
+  .project_successfull .cs_portfolio_img img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+/* 3. Testimonial Section: Mobile එකේ Image Hide කිරීම */
+/* ======================================================== */
+@media (max-width: 991px) {
+  /* Testimonial එකේ වම්පස image column එක සඟවා තැබීම */
+  section.cs_shape_wrap_2 .col-lg-4 {
+    display: none;
+  }
+  /* දකුණු පස text column එක mobile එකේ full-width කිරීම */
+  section.cs_shape_wrap_2 .col-lg-7 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* 4. Footer Section: Email Text Size එක කුඩා කිරීම */
+/* ====================================================== */
+.cs_footer_info a.cs_primary_font span {
+  font-size: 34px !important;
+  line-height: 1 !important; 
+}
+
+@media (max-width: 767px) {
+  .cs_footer_info a.cs_primary_font span {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* 5. CTA Section: Padding අඩු කිරීම */
+/* ======================================== */
+.cs_learning_project .cs_section_heading.cs_style_1 {
+  padding-top: 80px !important;
+  padding-bottom: 80px !important;
+}
+
+@media screen and (max-width: 991px) {
+  .cs_learning_project .cs_section_heading.cs_style_1 {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Contact Form Status Message Style --- */
+
+#form-status {
+  display: none; /* Default ලෙස hide කර තැබීම */
+}
+
+#form-status p {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin: 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+#form-status p.success {
+  background-color: #d4edda; /* ලා කොළ පාට */
+  border: 1px solid #c3e6cb;
+  color: #155724; /* තද කොළ පාට අකුරු */
+}
+
+#form-status p.error {
+  background-color: #f8d7da; /* ලා රතු පාට */
+  border: 1px solid #f5c6cb;
+  color: #721c24; /* තද රතු පාට අකුරු */
+}
+
+
+
+
+
+
+
+@media screen and (max-width: 991px) {
+  .csbtncenter {
+    align-items: center;
+    text-align: center;
+    align-content: center;
+  }
+}
+
+
+
+
+
+
+
+
+
+/*---------------Services Page CSS--------------------*/
+
+        .cs_service_card_list .cs_service_card {
+            margin-bottom: 30px;
+        }
+
+        .cs_service_card {
+            display: block;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            color: #fff;
+            text-decoration: none;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        
+        .cs_service_card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .cs_service_card_inner {
+            display: flex;
+            align-items: center;
+            min-height: 250px;
+            padding: 50px;
+        }
+
+        .cs_service_card_img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.6s ease;
+        }
+
+        .cs_service_card:hover .cs_service_card_img {
+            transform: scale(1.05);
+        }
+
+        .cs_service_card_overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0) 100%);
+            z-index: 1;
+        }
+
+        .cs_service_card_content {
+            position: relative;
+            z-index: 2;
+            max-width: 50%;
+        }
+
+        .cs_service_card .cs_card_number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .cs_service_card .cs_card_title {
+            font-size: 55px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .cs_service_card .cs_card_description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+        }
+
+        .cs_service_card .cs_btn.cs_style_1 {
+            color: #fff;
+        }
+
+
+
+        @media (max-width: 991px) {
+            .cs_service_card_inner {
+                padding: 40px;
+                min-height: 400px;
+            }
+            .cs_service_card_content {
+                max-width: 70%;
+            }
+            .cs_service_card .cs_card_title {
+                font-size: 40px;
+            }
+        }
+
+
+        @media (max-width: 767px) {
+            .cs_service_card_content {
+                max-width: 100%;
+            }
+            .cs_service_card .cs_card_title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 767px) {
+          .cs_service_card_overlay {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 65%, rgba(0, 0, 0, 0) 130%);
+              z-index: 1;
+          }
+        }
+
+
+    /*---------------Services Page CSS--------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Portfolio Filter - New Pill Style (with Mobile Fix) --- */
+
+/* Filter menu එකේ පිටත container එක (වටකුරු box එක) */
+.cs_isotop_item_menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 50px;
+  display: inline-flex; /* Buttons ටික එක පෙළට තැබීමට */
+  flex-wrap: wrap; /* Mobile එකේදී ඊළඟ පේළියට යැවීමට ඉඩ දීම */
+  justify-content: center; /* Buttons ටික මැදට align කිරීම */
+  background-color: transparent;
+  gap: 10px; /* Buttons අතර හිඩස */
+}
+
+/* Dark mode එකේදී border එකේ පාට වෙනස් කිරීම */
+.dark .cs_isotop_item_menu ul {
+  border-color: #454545;
+}
+
+/* Filter menu එකේ එක item එකක් (button එකක්) */
+.cs_isotop_item_menu ul li {
+  padding: 10px 25px;
+  cursor: pointer;
+  border-radius: 30px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  color: var(--body-color);
+  white-space: nowrap; /* වචන කැඩීම වැළැක්වීමට */
+}
+
+/* Hover කරන විට text එකේ පාට වෙනස් වීම */
+.cs_isotop_item_menu ul li:hover {
+  color: #e63946;
+}
+
+/* Active (select වූ) button එක style කිරීම */
+.cs_isotop_item_menu ul li.active {
+  background-color: #e63946;
+  color: #ffffff !important;
+}
+
+/* කලින් තිබූ circle icon එක ඉවත් කිරීම */
+.cs_isotop_item_menu ul li::before,
+.cs_isotop_item_menu ul li::after {
+  content: none !important; 
+}
+
+/* ===== Mobile & Tablet Styles (තිරය 767px ට වඩා කුඩා විට) ===== */
+@media (max-width: 767px) {
+  /* Mobile එකේදී පිටත box එක ඉවත් කිරීම */
+  .cs_isotop_item_menu ul {
+    border: none;
+    padding: 0;
+    gap: 8px; /* Mobile එකේදී gap එක තව ටිකක් අඩු කිරීම */
+  }
+
+  /* Mobile එකේදී buttons ටිකක් කුඩා කිරීම */
+  .cs_isotop_item_menu ul li {
+    padding: 8px 20px;
+    font-size: 15px; /* අකුරු ප්‍රමාණය කුඩා කිරීම */
+  }
+}
+
+
+
+
+
+/* --- Huawei Nova 3i - Dark/Light Mode Button Width FIX --- */
+
+.cs_toggle .setting_mode {
+
+  min-width: 50px; /* ඉතා කුඩා තිරවලදී බොත්තම කුඩා වීම වැළැක්වීමට */
+  max-width: 50px; /* ඉතා කුඩා තිරවලදී බොත්තම කුඩා වීම වැළැක්වීමට */
+}
+
+
+
+
+
+
+
+
+
+
+
+/* --- Portfolio Grid - Mobile Two-Column Layout 
+
+@media (max-width: 767px) {
+  .cs_isotop_items_details .cs_item {
+    width: 50% !important;     Mobile එකේදී column දෙකකට සකස් කිරීම 
+  }
+}
+--- */
+
+
+
+/* --- Portfolio Grid - Mobile Two-Column FIX for Google Pixel --- ------------------------------Only one line work with pixel 5------
+@media (max-width: 767px) {
+  .cs_isotop_items_details .cs_item.col-6 {
+    width: 50% !important;          Forces two columns for Isotope 
+    max-width: 50% !important;      Prevents the item from expanding 
+    flex: 0 0 50% !important;       Ensures proper sizing in a flex context 
+  }
+}
+
+*/
+
+/* --- Portfolio Grid - Mobile Two-Column Layout --- */
+@media (max-width: 767px) {
+  .cs_isotop_items_details .cs_item {
+    width: 50%;
+  }
+}
+
+
+
+
+/* --- LightGallery Popup - Image Size & Close Button Color --- */
+
+/* 1. Image eka loku kirima (screen ekata fit wenna) */
+.lg-inner {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: 100%; /* Ensures the image doesn't exceed its container's width */
+  height: auto;
+}
+
+/* 2. Close, Next, Prev buttons wala paata wens kirima */
+.lg-toolbar .lg-close,
+.lg-actions .lg-next,
+.lg-actions .lg-prev {
+  color: #e63946 !important; /* Close button eka ratu paata kirima */
+  transition: all 0.3s ease;
+}
+
+/* Hover karana kota paata wens kirima */
+.lg-toolbar .lg-close:hover,
+.lg-actions .lg-next:hover,
+.lg-actions .lg-prev:hover {
+  color: #c9303c !important; /* Thawa tikak thada ratu paatak */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- LightGallery Popup - Custom Styles (FINAL) --- */
+
+/* 1. Background එකට Glassmorphism (Blur) Effect එක යෙදීම */
+.lg-backdrop {
+  background-color: rgba(16, 16, 16, 0.8) !important; /* කළු පාට, 70% විනිවිද පෙනෙන සේ සකස් කිරීම */
+  backdrop-filter: blur(10px); /* Background එක blur කිරීම */
+  -webkit-backdrop-filter: blur(10px); /* Safari වැනි browser සඳහා */
+}
+
+/* 2. Image එක screen එකට fit වෙන්න ලොකු කිරීම */
+.lg-inner {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* 3. Close button එකේ position එක සහ style එක වෙනස් කිරීම */
+.lg-toolbar {
+  background-color: transparent !important;
+  height: auto !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1083; /* Image එකට උඩින් පෙන්වීමට */
+}
+
+/* --- LightGallery Popup - Close Button Centering & Hover Fix --- */
+
+.lg-toolbar .lg-close {
+  position: fixed; /* තිරයේ එකම තැනක තැබීමට */
+  top: 30px; /* උඩ සිට පරතරය */
+  right: 30px; /* දකුණේ සිට පරතරය */
+  
+  /* Default box style එක ඉවත් කිරීම */
+  background-color: rgba(30, 30, 30, 0.6) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 44px !important;
+  height: 44px !important;
+  
+  /* 'X' icon එක style කිරීම */
+  color: #fff !important;
+  font-size: 28px !important;
+  line-height: 44px !important; /* FIX: Icon එක vertically center කිරීම */
+  text-align: center;
+  padding: 0; /* අනවශ්‍ය padding ඉවත් කිරීම */
+  
+  transition: all 0.3s ease !important; /* FIX: Transition එක මෙතනට දැමීම */
+  transform: rotate(0deg); /* FIX: ආරම්භක rotation අගය දීම */
+}
+
+/* Close button එක hover කරන විට */
+.lg-toolbar .lg-close:hover {
+  color: #fff !important;
+  background-color: #e63946 !important; /* Hover කරන විට රතු පාට background එකක් */
+  transform: rotate(90deg); /* FIX: Hover එකේදී rotate කිරීම */
+}
+
+/* 4. Next/Previous arrows ඉවත් කිරීම */
+.lg-actions .lg-next,
+.lg-actions .lg-prev {
+  display: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Portfolio Load More Functionality -------------------------------------------- */
+.hidden-item {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+/* --- Slide-Out Menu: Align Contact Info to Left & FIX SCROLLING --- */
+
+
+
+/* 2. Layout එක column දෙකක සිට එකකට මාරු කිරීම */
+.cs_side_header_in .row {
+  display: block; /* Flex layout එක ඉවත් කර සාමාන්‍ය block එකක් කිරීම */
+}
+
+/* 3. Navigation සහ Contact කොටස් full-width කිරීම */
+.cs_side_header_in .col-7,
+.cs_side_header_in .col-4.offset-1 {
+  width: 100%;
+  max-width: 100%;
+  flex: none;
+  margin-left: 0;
+}
+
+/* 4. Contact කොටස සහ Links අතර ඉඩක් තැබීම */
+.cs_side_header_in .cs_box_two {
+  margin-top: 50px;
+  margin-bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Slide-Out Menu Close Button - Size & Position --- */
+
+.cs_close {
+  /* බොත්තමේ ප්‍රමාණය (size) මෙතනින් වෙනස් කරන්න */
+  width: 40px;   /* මුලින් 25px තිබුණේ */
+  height: 40px;  /* මුලින් 25px තිබුණේ */
+
+  /* බොත්තමේ පිහිටීම (position) මෙතනින් වෙනස් කරන්න */
+  top: 25px;     /* උඩ සිට පරතරය */
+  right: 90px;   /* දකුණේ සිට පරතරය */
+
+  border-width: 2px; /* වටේ තියෙන රවුමේ මහත */
+}
+
+/* බොත්තම ඇතුළේ තියෙන 'X' ලකුණේ මහත සහ දිග සකස් කිරීම */
+.cs_close::before,
+.cs_close::after {
+  height: 2px; /* 'X' ලකුණේ මහත */
+  width: 50%;  /* 'X' ලකුණේ දිග (බොත්තමේ පළලෙන් 50%) */
+  margin-left: -25%; /* 'X' ලකුණ මැදට ගැනීම සඳහා */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- -----------------------------------  Social media icons    -------------------------------------------n --- */
+
+.socials-container{
+  display: flex;
+  gap: 20px;
+}
+.socials-container a{
+  background-color: white;
+  padding: 1em;
+  border-radius: 50%;
+  height: 64px;
+  width: 64px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+.socials-container a svg{
+  height: 32px;
+}
+.socials-container a::before{
+  content: attr(data-social);
+  position: absolute;
+  background-color: var(--accent-color);
+  color: white;
+  text-decoration: none;
+  padding: 0.5em 1em;
+  border-radius: 100px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  transform: translateY(-30px) rotate(25deg);
+  opacity: 0;
+  transition: 200ms cubic-bezier(.42,0,.44,1.68);
+}
+.socials-container a:hover{
+  background-color: var(--accent-color);
+  fill: white;
+}
+.socials-container a::after{
+  content: '';
+  position: absolute;
+  height: 0;
+  width: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid var(--accent-color);
+  transform: translateY(0) rotate(25deg);
+  opacity: 0;
+  transition: 200ms cubic-bezier(.42,0,.44,1.68);
+}
+.socials-container a:hover::before{
+  transform: translateY(-65px) rotate(0);
+  opacity: 1;
+}
+.socials-container a:hover::after{
+  transform: translateY(-42px) rotate(0);
+  opacity: 1;
+}
+
+
+/* --- Social Media Icons - Mobile Two-Row Layout --- */
+@media (max-width: 767px) {
+  .socials-container {
+    flex-wrap: wrap; /* Allows the icons to wrap to the next line */
+    justify-content: center; /* Centers the icons within the container */
+    max-width: 252px; /* Sets a max-width to force wrapping after 3 icons */
+    margin: 0 auto; /* Centers the container itself within the footer */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Instagram Icon - Gradient Hover Effect --- */
+a[data-social="Instagram"]:hover {
+  background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
+}
+
+/* This updates the hover tooltip to also use the gradient */
+a[data-social="Instagram"]:hover::before {
+  background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
+}
+
+/* This updates the tooltip's arrow to a color from the gradient */
+a[data-social="Instagram"]:hover::after {
+  border-top-color: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Mobile Nav Menu Footer - FINAL FIX V3 --- */
+@media (max-width: 1199px) {
+
+  /* මෙනු list එකේ පහළින් ඉඩක් තැබීම */
+  .cs_nav .cs_nav_list {
+    padding-bottom: 155px; 
+  }
+
+  /* Footer එකට අදාළ LI element එක */
+  .cs_mobile_nav_footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    list-style: none;
+    padding: 45px 20px 25px 10px; /* උඩින් හිස් ඉඩක් සෑදීමට padding-top වැඩි කළා last left */
+    text-align: center;
+    border-top: none;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  
+  /* අලුතින් ඉර නිර්මාණය කිරීම */
+  .cs_mobile_nav_footer::before {
+    content: '';
+    position: absolute;
+    top: 22px; /* උඩ padding එක මැදට ඉර ගෙන ඒම */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%; /* ඉරේ දිග */
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.15); /* ඉරේ පාට */
+  }
+
+  /* Contact details වල border ඉවත් කර margin සකස් කිරීම */
+  .cs_mobile_nav_contact {
+    padding-bottom: 0;
+    margin-bottom: 15px;
+    border-bottom: none; /* කලින් තිබූ ඉර සම්පූර්ණයෙන්ම ඉවත් කළා */
+  }
+  
+  .cs_mobile_nav_contact a {
+    display: block;
+    color: #000000 !important;
+    opacity: 0.8;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1.6;
+    transition: opacity 0.3s ease;
+    align-items: center;
+    text-align: center;
+  }
+
+
+  .cs_mobile_nav_contact a:hover {
+    opacity: 1;
+  }
+
+  /* Social icons වල container එක */
+  .cs_mobile_nav_social {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 0;
+  }
+
+  /* Social icon එකක් style කිරීම */
+  /* --- Social Icons Centering FIX --- */
+
+  /* Social icon එකේ රවුම (container) style කිරීම */
+  .cs_mobile_nav_social a {
+    display: grid; /* Flex වෙනුවට Grid යොදා ගැනීම */
+    place-items: center; /* Icon එක හරියටම මැදට ගැනීමට */
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+
+  .cs_mobile_nav_social a:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+
+  /* Icon එක (SVG) style කිරීම */
+  .cs_mobile_nav_social a svg {
+    width: 20px; /* Icon එකේ ප්‍රමාණය */
+    height: 20px;
+    fill: #000000;
+    align-items: center;
+    align-content: center;
+  }
+
+
+}
+
+/* Desktop එකේදී මෙම footer එක hide කිරීම */
+@media (min-width: 1200px) {
+  .cs_mobile_nav_footer {
+    display: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Navigation Active State --- */
+.cs_nav .cs_nav_list > li.active > a {
+  color: #e63946 !important; /* ඔබේ වෙබ් අඩවියේ ප්‍රධාන රතු පාට */
+}
+
+
+
+
+
+
+
+
+
+/* --- Service Details Page - Mobile Text Alignment FIX --------------------------------------   TEXT      ----------------------------------------------- */
+@media (max-width: 991px) {
+  .cs_service_details .cs_service_details_text p {
+    text-align: justify;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Isotope Load More Animation Fix --*--*-*-*-*-*-Onema naaaa*-*-*-*-*-- */
+.cs_item.no-transition {
+  transition: none !important;
+  -webkit-transition: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+/* --- User Request: Contact Page Details & Map Adjust (v5 - Left Align) --- */
+
+/* 1. Contact details ටික ලොකු කිරීම */
+.cs_contact_section_2 .cs_icon .cs_icon_style {
+    height: 55px; 
+    width: 55px;
+}
+.cs_contact_section_2 .cs_icon .cs_icon_style svg {
+    width: 24px;
+    height: 24px;
+}
+.cs_contact_section_2 .cs_icon .cs_icon_text .cs_icon_title {
+    font-size: 26px;
+    margin-top: 18px;
+}
+.cs_contact_section_2 .cs_icon .cs_icon_text .cs_icon_subtitle {
+    font-size: 18px;
+}
+
+/* 2. Map එක පොඩි කරලා, දකුණට align කරලා, වම් පැත්තෙන් white space හැදීම */
+.cs_contact_section_2 .cs_google_map {
+    border-radius: 16px;
+    height: 350px;     /* Map එකේ උස අඩු කළා (Original: 530px) */
+    width: 80%;        /* Map එකේ පළල අඩු කළා (Original: 100%) */
+    margin-left: left; /* Map එක දකුණට තල්ලු කිරීමට (align right) */
+    margin-right: 0;   
+    margin-top: 50px;  /* Details සහ Map එක අතර ඉඩක් තැබීමට */
+    overflow: hidden;  /* Iframe එක අලුත් සීමාවට ගැලපීමට */
+}
+
+/* 3. Iframe එක container එකට ගැලපෙන ලෙස තැබීම (for safety) */
+.cs_contact_section_2 .cs_google_map iframe {
+    width: 100%;
+    height: 100%;
+}
+
+/* 4. Contact details (row eka) වමට align කර, පරතරය අඩු කිරීම */
+.cs_contact_section_2 .row {
+    justify-content: flex-start; /* Items ටික වමට align කිරීම (center වෙනුවට) */
+    gap: 40px; /* Items අතර පරතරය සකස් කිරීම */
+}
+
+/* 5. Bootstrap col-md-4 eke default පළල අයින් කිරීම (පරතරය අඩු කිරීමට) */
+.cs_contact_section_2 .row .col-md-4 {
+    flex: 0 1 auto; /* Bootstrap eke % width eka ain karala, content ekata galapenna damma */
+    max-width: none;
+    width: auto; /* පළල auto කිරීම */
+}
+
+
+
+
+
+/* --- Mobile-Only: Center Contact Items & Map --- */
+@media (max-width: 991px) {
+  
+  /* 1. Contact details row eka center karanna */
+  .cs_contact_section_2 .row {
+    justify-content: center; /* Items ටික මැදට align කරanna */
+  }
+
+  /* 2. Map eka center karanna */
+  .cs_contact_section_2 .cs_google_map {
+    width: 90%;        /* Pura palala nethuwa 90%k ganna */
+    margin-left: auto;  /* Center karanna */
+    margin-right: auto; /* Center karanna */
+    margin-top: 40px;   /* Contact details walata yatin idak thiyanna */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =================================
+   Hero Button (NEW Custom Styles - Final Update) 
+   ================================= */
+
+.hero-buttons-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Buttons දෙක අතර පරතරය */
+}
+
+/* Button දෙකටම පොදු styles */
+.btn-new {
+    padding: 12px 28px;
+    border-radius: 16px; /* <<< ඔබ ඉල්ලූ 16px */
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: 2px solid;
+    cursor: pointer;
+}
+
+/* =================================
+   Light Mode Styles (Default)
+   ================================= */
+
+/* 1. Solid Red Button (Light Mode) */
+.btn-solid-new {
+    background-color: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+.btn-solid-new:hover {
+    background-color: #111; /* <<< ඔබ ඉල්ලූ කළු පාට */
+    color: #fff;
+    border-color: #111;
+}
+
+/* 2. Outline Button (Light Mode) */
+.btn-outline-new {
+    background-color: transparent;
+    color: var(--heading-color);
+    border-color: var(--heading-color); 
+}
+.btn-outline-new:hover {
+    background-color: #111; /* <<< ඔබ ඉල්ලූ කළු පාට */
+    color: #fff;
+    border-color: #111;
+}
+
+
+/* =================================
+   Dark Mode Overrides
+   (මේකෙන් Dark Mode එකේදී Hover එක ආපහු Accent Color එකට මාරු වෙනවා)
+   ================================= */
+
+/* Dark mode base state */
+.dark .btn-outline-new {
+    color: #fff;
+    border-color: #fff;
+}
+
+/* Dark mode HOVER (Reverting to original) */
+.dark .btn-solid-new:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.dark .btn-outline-new:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Fix: Logo Moving Section (Mobile View) --- */
+@media (max-width: 767px) {
+  
+  /* 1. ලোগෝ එක වටේ padding එක අඩු කිරීම (desktop එකේ 65px තිබුනේ) */
+  .cs_partner_logo {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* 2. Mobile එකේදී ලোগෝ වල උස අඩු කිරීම (desktop එකේ 100px තිබුනේ) */
+  .cs_partner_logo img {
+    max-height: 35px; /* 100px සිට 45px දක්වා අඩු කළා */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Portfolio Loading Indicator --- */
+#portfolio-loader {
+  display: inline-block;
+  width: 30px; /* ටිකක් ලොකුවට */
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.15); /* ලා පාට වටය */
+  border-top-color: #e63946; /* Accent color */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 15px;
+  vertical-align: middle;
+  position: relative;
+  top: -4px; /* Title එක සමග align කිරීමට */
+  transition: opacity 0.5s ease;
+}
+
+/* Dark mode සඳහා */
+.dark #portfolio-loader {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #e63946;
+}
+
+/* Mobile එකේදී ටිකක් කුඩා කිරීම */
+@media (max-width: 767px) {
+  #portfolio-loader {
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
+    margin-left: 10px;
+    top: -2px;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
