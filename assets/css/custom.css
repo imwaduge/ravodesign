@@ -1301,23 +1301,35 @@ a[data-social="Instagram"]:hover::after {
   transition: opacity 0.5s ease;
 }
 
+/* --- Portfolio Loading Percentage (අලුතින් එකතු කළේ) --- */
+#portfolio-percent-loader {
+  display: inline-block;
+  font-size: 28px; /* Title එක 55px නිසා, ටිකක් කුඩාවට */
+  font-weight: 600;
+  color: var(--body-color); /* Title එකේ පාටම */
+  vertical-align: middle;
+  position: relative;
+  top: -4px; /* Spinner එක වගේම align කිරීමට */
+  margin-left: 10px; /* Spinner එක සහ % එක අතර පොඩි ඉඩක් */
+  transition: opacity 0.5s ease; /* Hide වෙනකොට fade out වීමට */
+}
+
+/* Dark mode සඳහා (අලුතින් එකතු කළේ) */
+.dark #portfolio-percent-loader {
+  color: var(--heading-color);
+}
+
+/* Mobile එකේදී ටිකක් කුඩා කිරීම (අලුතින් එකතු කළේ) */
+@media (max-width: 767px) {
+  #portfolio-percent-loader {
+    font-size: 20px;
+    top: -2px;
+    margin-left: 8px;
+  }
+}
+
 /* Dark mode සඳහා */
 .dark #portfolio-loader {
   border-color: rgba(255, 255, 255, 0.15);
   border-top-color: #e63946;
-}
-
-/* Mobile එකේදී ටිකක් කුඩා කිරීම */
-@media (max-width: 767px) {
-  #portfolio-loader {
-    width: 22px;
-    height: 22px;
-    border-width: 2px;
-    margin-left: 10px;
-    top: -2px;
-  }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
