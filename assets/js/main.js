@@ -464,6 +464,7 @@ $(window).on('load', function() {
     // Check if the portfolio container exists
     if ($.exists(".cs_isotop_items_details")) {
         var $portfolioGrid = $(".cs_isotop_items_details");
+        var $portfolioLoader = $('#portfolio-loader'); // <-- අලුතෙන් මේ line එක දාන්න---------------------------------
         var $filterMenu = $("#portfolio-filter-menu");
         var $loadMoreContainer = $('#load-more-container');
         var $loadMoreBtn = $('#load-more-btn');
@@ -680,6 +681,11 @@ $(window).on('load', function() {
         setTimeout(function() {
             $isotopeInstance.isotope('layout');
         }, 300); // Increased delay for safety
+
+        // ===== START: අලුතෙන් මේ කොටස එකතු කරන්න =====---------------------------------
+        $portfolioLoader.hide(); // Loader එක Hide කරන්න
+        $portfolioGrid.css('opacity', 1); // Load වුනු Grid එක පෙන්වන්න
+        // ===== END: අලුතෙන් එකතු කළ කොටස =====
     }
 
     // Initialize the other isotope instance if it exists
