@@ -1325,32 +1325,70 @@ a[data-social="Instagram"]:hover::after {
 
 
 
-/* --- Portfolio Loading Percentage --- */
+
+
+
+
+
+
+/* --- Portfolio Loading Indicator (Manual Preload) --- */
+#portfolio-loader {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.15);
+  border-top-color: #e63946;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 15px;
+  vertical-align: middle;
+  position: relative;
+  top: -4px;
+  transition: opacity 0.5s ease;
+  opacity: 1; /* මුලින් පෙන්වීම */
+}
+
 #portfolio-percentage {
   display: inline-block;
-  font-size: 24px; /* ඔබට අවශ්‍ය ප්‍රමාණයට සකසන්න */
+  font-size: 24px;
   font-weight: 600;
-  color: #e63946; /* ප්‍රධාන accent පාට */
+  color: #e63946;
   margin-left: 10px;
   vertical-align: middle;
   position: relative;
-  top: -4px; /* Spinner එක සමග align කිරීමට */
-  transition: opacity 0.5s ease;
-  min-width: 55px; /* 100% පෙන්වන විට පනීම වැළැක්වීමට */
+  top: -4px;
+  transition: opacity 0.5s ease, color 0.3s ease;
+  min-width: 55px;
   text-align: left;
+  opacity: 1; /* මුලින් පෙන්වීම */
 }
 
-/* Dark mode එකේදී */
+/* Dark mode */
+.dark #portfolio-loader {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #e63946;
+}
 .dark #portfolio-percentage {
   color: #e63946;
 }
 
-/* Mobile එකේදී */
+/* Mobile */
 @media (max-width: 767px) {
+  #portfolio-loader {
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
+    margin-left: 10px;
+    top: -2px;
+  }
   #portfolio-percentage {
     font-size: 18px;
     top: -2px;
     margin-left: 8px;
     min-width: 45px;
   }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

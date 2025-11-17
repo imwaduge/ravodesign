@@ -296,13 +296,13 @@
                     <div class="cs_section_heading cs_style_1 cs_type_1">
 
 
-                        <div class="cs_section_heading_text">
-                            <h2 class="cs_section_title anim_text_writting">
-                                Our Portfolio 
-                                <span id="portfolio-loader"></span>
-                                <span id="portfolio-percentage">0%</span>
-                            </h2>
-                        </div>
+                    <div class="cs_section_heading_text">
+                        <h2 class="cs_section_title anim_text_writting">
+                            Our Portfolio 
+                            <span id="portfolio-loader"></span>
+                            <span id="portfolio-percentage">0%</span>
+                        </h2>
+                    </div>
 
 
                     </div>
@@ -2056,52 +2056,67 @@
 
 
     
-
-
-
     <script>
       (function ($) {
         "use strict";
         
-        // Select the elements
-        var $container = $('#animated-thumbnails-gallery');
-        var $loader = $('#portfolio-loader');
-        var $percentageText = $('#portfolio-percentage');
+        // DOM එක ready වූ විගස මෙය ක්‍රියාත්මක වේ (window.load වෙනකල් ඉන්නේ නෑ)
+        $(document).ready(function() {
 
-        // Check if the container exists
-        if ($container.length) {
-          
-          // Initialize imagesLoaded on the gallery
-          var imgLoad = $container.imagesLoaded();
-          
-          // Get the total number of images
-          var totalImages = imgLoad.images.length;
-          var loadedImages = 0;
-
-          // Update percentage on 'progress'
-          imgLoad.on('progress', function(instance, image) {
-            loadedImages++;
-            // Calculate percentage
-            var percent = Math.floor((loadedImages / totalImages) * 100);
-            // Update the text
-            $percentageText.text(percent + '%');
-          });
-
-          // When all images are loaded
-          imgLoad.on('always', function(instance) {
-            // Ensure it shows 100% at the end
-            $percentageText.text('100%');
+            var $loader = $('#portfolio-loader');
+            var $percentageText = $('#portfolio-percentage');
             
-            // Hide the loader and percentage text with a fade
-            $loader.fadeOut(500);
-            $percentageText.fadeOut(500);
-          });
-        }
+            // Gallery එකේ ඇති සියලුම portfolio <a> tags ටික තෝරාගැනීම
+            var $imageLinks = $('#animated-thumbnails-gallery').find('.cs_portfolio');
+            
+            var totalImages = $imageLinks.length;
+            var loadedImages = 0;
+
+            if (totalImages === 0) {
+                // ඡායාරූප කිසිවක් නැත්නම්, loader එක සැඟවීම
+                $loader.fadeOut(500);
+                $percentageText.fadeOut(500);
+                return; 
+            }
+
+            // ප්‍රගතිය update කරන function එක
+            function updateProgress() {
+                loadedImages++;
+                // ප්‍රතිශතය ගණනය කිරීම
+                var percent = Math.floor((loadedImages / totalImages) * 100);
+                // Text එක update කිරීම
+                $percentageText.text(percent + '%');
+
+                // සියලුම ඡායාරූප load වී අවසන්දැයි බැලීම
+                if (loadedImages === totalImages) {
+                    // 100% වූ පසු, තත්පර 0.25ක් පෙන්වා fade out කිරීම
+                    setTimeout(function() {
+                        $loader.fadeOut(500);
+                        $percentageText.fadeOut(500);
+                    }, 250);
+                }
+            }
+
+            // <a> tags 123 හරහා loop වී, background එකෙන් load කිරීම
+            $imageLinks.each(function() {
+                var imagePath = $(this).attr('href'); // Image path එක ගැනීම
+
+                // මතකය තුළ අලුත් Image object එකක් සෑදීම
+                var img = new Image();
+                img.src = imagePath;
+
+                // Image එක load වූ පසු හෝ error වූ පසු updateProgress() function එක call කිරීම
+                // (Error වුනත් count කරන්නේ loader එක 99% එකේ හිරවීම වැළැක්වීමටයි)
+                img.onload = updateProgress;
+                img.onerror = updateProgress; 
+            });
+
+        }); // End document.ready
 
       })(jQuery);
+
     </script>
 
-
     </body>
-
+    
 </html>
