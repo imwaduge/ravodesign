@@ -1272,3 +1272,39 @@ a[data-social="Instagram"]:hover::after {
     max-height: 35px; /* 100px සිට 45px දක්වා අඩු කළා */
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Portfolio Image Loader Progress Bar --- */
+.loader-progress-container {
+  width: 100%;
+  height: 6px;
+  background-color: #f0f0f0; /* Light mode background */
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 10px 0 15px 0; /* Filter එකටයි bar එකටයි අතර පොඩි ඉඩක් */
+  display: none; /* JavaScript වලින් පාලනය කිරීමට මුලින් සඟවා තබයි */
+}
+
+.loader-progress-bar {
+  width: 0%;
+  height: 100%;
+  background-color: #e63946; /* ඔයාගෙ ප්‍රධාන රතු පාට */
+  border-radius: 3px;
+  transition: width 0.2s ease-out; /* Bar එක පිරෙනකොට ලස්සනට පෙන්වීමට */
+}
+
+/* Dark Mode එකට ගැලපෙන්න */
+.dark .loader-progress-container {
+  background-color: #454545; /* Dark mode background */
+}
