@@ -1285,42 +1285,57 @@ a[data-social="Instagram"]:hover::after {
 
 
 
-/* --- Portfolio Loading Indicator --- */
+
+
+
+
+/* --- Portfolio Loading Indicators (Spinner + Percent) --- */
+            
 #portfolio-loader {
   display: inline-block;
-  width: 30px; /* ටිකක් ලොකුවට */
+  width: 30px; 
   height: 30px;
-  border: 3px solid rgba(0, 0, 0, 0.15); /* ලා පාට වටය */
-  border-top-color: #e63946; /* Accent color */
+  border: 3px solid rgba(0, 0, 0, 0.15); 
+  border-top-color: #e63946; 
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite; /* <<< මෙතන තමයි animation එක */
   margin-left: 15px;
   vertical-align: middle;
   position: relative;
-  top: -4px; /* Title එක සමග align කිරීමට */
+  top: -4px; 
   transition: opacity 0.5s ease;
 }
 
-/* --- Portfolio Loading Percentage (අලුතින් එකතු කළේ) --- */
 #portfolio-percent-loader {
   display: inline-block;
-  font-size: 28px; /* Title එක 55px නිසා, ටිකක් කුඩාවට */
+  font-size: 28px; 
   font-weight: 600;
-  color: var(--body-color); /* Title එකේ පාටම */
+  color: var(--body-color); 
   vertical-align: middle;
   position: relative;
-  top: -4px; /* Spinner එක වගේම align කිරීමට */
-  margin-left: 10px; /* Spinner එක සහ % එක අතර පොඩි ඉඩක් */
-  transition: opacity 0.5s ease; /* Hide වෙනකොට fade out වීමට */
+  top: -4px; 
+  margin-left: 10px; 
+  transition: opacity 0.5s ease; 
 }
 
-/* Dark mode සඳහා (අලුතින් එකතු කළේ) */
+/* Dark mode සඳහා */
+.dark #portfolio-loader {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #e63946;
+}
 .dark #portfolio-percent-loader {
   color: var(--heading-color);
 }
 
-/* Mobile එකේදී ටිකක් කුඩා කිරීම (අලුතින් එකතු කළේ) */
+/* Mobile එකේදී */
 @media (max-width: 767px) {
+  #portfolio-loader {
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
+    margin-left: 10px;
+    top: -2px;
+  }
   #portfolio-percent-loader {
     font-size: 20px;
     top: -2px;
@@ -1328,8 +1343,7 @@ a[data-social="Instagram"]:hover::after {
   }
 }
 
-/* Dark mode සඳහා */
-.dark #portfolio-loader {
-  border-color: rgba(255, 255, 255, 0.15);
-  border-top-color: #e63946;
+/* Animation එකේ definition එක (මේකත් තියෙන්න ඕන) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
