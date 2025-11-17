@@ -1321,3 +1321,36 @@ a[data-social="Instagram"]:hover::after {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+
+
+
+/* --- Portfolio Loading Percentage --- */
+#portfolio-percentage {
+  display: inline-block;
+  font-size: 24px; /* ඔබට අවශ්‍ය ප්‍රමාණයට සකසන්න */
+  font-weight: 600;
+  color: #e63946; /* ප්‍රධාන accent පාට */
+  margin-left: 10px;
+  vertical-align: middle;
+  position: relative;
+  top: -4px; /* Spinner එක සමග align කිරීමට */
+  transition: opacity 0.5s ease;
+  min-width: 55px; /* 100% පෙන්වන විට පනීම වැළැක්වීමට */
+  text-align: left;
+}
+
+/* Dark mode එකේදී */
+.dark #portfolio-percentage {
+  color: #e63946;
+}
+
+/* Mobile එකේදී */
+@media (max-width: 767px) {
+  #portfolio-percentage {
+    font-size: 18px;
+    top: -2px;
+    margin-left: 8px;
+    min-width: 45px;
+  }
+}
