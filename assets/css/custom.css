@@ -1287,3 +1287,15 @@ a[data-social="Instagram"]:hover::after {
 
 
 
+/* --- Portfolio FOUC (Flash of Unfiltered Content) Fix V2 --- */
+
+/* 1. මුලින්ම portfolio container එක සඟවා තැබීම */
+#animated-thumbnails-gallery {
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+/* 2. JS එකෙන් මේ class එක add කලාම container එක fade-in කිරීම */
+#animated-thumbnails-gallery.isotope-loaded {
+  opacity: 1;
+}

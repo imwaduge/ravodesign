@@ -398,8 +398,8 @@ var customAllOrder = [
 // ===== START: PORTFOLIO FILTER + LOAD MORE + CUSTOM SORT LOGIC ===================
 // =================================================================================
 
-// $(window).on('load', function() {
-$(document).ready(function() {
+$(window).on('load', function() {
+// $(document).ready(function() {
 
     // Check if the portfolio container exists
     if ($.exists(".cs_isotop_items_details")) {
@@ -615,6 +615,12 @@ $(document).ready(function() {
 
         // Run the hash filter function on load
         filterFromHash();
+
+        // --- අලුතින් එකතු කල යුතු පේළිය ---
+    // Isotope එක load වෙලා ඉවර නිසා container එක fade-in කරන්න
+    $portfolioGrid.addClass('isotope-loaded');
+    // --- අලුත් පේළිය අවසන් ---
+    
 
         // Failsafe layout for tricky devices
         setTimeout(function() {
