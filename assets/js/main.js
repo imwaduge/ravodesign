@@ -48,7 +48,7 @@
     return $(selector).length > 0;
   };
 
-  $(window).on("load", function () {
+  $(document).ready(function () { // <-- මෙතන වෙනස් කළා
     $(window).trigger("scroll");
     $(window).trigger("resize");
     preloader();
