@@ -459,7 +459,7 @@ var customAllOrder = [
 // ===== START: PORTFOLIO FILTER + LOAD MORE + CUSTOM SORT LOGIC ===================
 // =================================================================================
 
-$(window).on('load', function() {
+$(document).ready(function() {
 
     // Check if the portfolio container exists
     if ($.exists(".cs_isotop_items_details")) {
@@ -473,6 +473,10 @@ $(window).on('load', function() {
         var itemsToShowInitially = 12; // මුලින් පෙන්වන ගණන
         var itemsToLoadOnClick = 6;   // Click කළ විට පෙන්වන ගණන
         // --------------------------
+
+        // ===== START: අලුතෙන් මේ line එක දාන්න =====
+        $portfolioGrid.imagesLoaded( function() {
+        // ===== END: අලුතෙන් දාපු line එක =====
 
         
 
@@ -682,10 +686,21 @@ $(window).on('load', function() {
             $isotopeInstance.isotope('layout');
         }, 300); // Increased delay for safety
 
-        // ===== START: අලුතෙන් මේ කොටස එකතු කරන්න =====---------------------------------
-        $portfolioLoader.hide(); // Loader එක Hide කරන්න
-        $portfolioGrid.css('opacity', 1); // Load වුනු Grid එක පෙන්වන්න
-        // ===== END: අලුතෙන් එකතු කළ කොටස =====
+
+
+      // ===== START: අලුතෙන් මේ කොටස දාන්න =====
+
+      // 1. Loader එක Hide කරන්න
+      $portfolioLoader.hide(); 
+
+      // 2. Load වුනු Grid එක පෙන්වන්න
+      $portfolioGrid.css('opacity', 1); 
+
+      }); // <-- imagesLoaded function එක close කරන වරහන
+
+      // ===== END: අලුතෙන් දාපු කොටස =====
+      
+
     }
 
     // Initialize the other isotope instance if it exists
