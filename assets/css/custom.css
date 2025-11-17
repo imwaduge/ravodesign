@@ -1285,26 +1285,39 @@ a[data-social="Instagram"]:hover::after {
 
 
 
-/* --- Portfolio Image Loader Progress Bar --- */
-.loader-progress-container {
-  width: 100%;
-  height: 6px;
-  background-color: #f0f0f0; /* Light mode background */
-  border-radius: 3px;
-  overflow: hidden;
-  margin: 10px 0 15px 0; /* Filter එකටයි bar එකටයි අතර පොඩි ඉඩක් */
-  display: none; /* JavaScript වලින් පාලනය කිරීමට මුලින් සඟවා තබයි */
+/* --- Portfolio Loading Indicator --- */
+#portfolio-loader {
+  display: inline-block;
+  width: 30px; /* ටිකක් ලොකුවට */
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.15); /* ලා පාට වටය */
+  border-top-color: #e63946; /* Accent color */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 15px;
+  vertical-align: middle;
+  position: relative;
+  top: -4px; /* Title එක සමග align කිරීමට */
+  transition: opacity 0.5s ease;
 }
 
-.loader-progress-bar {
-  width: 0%;
-  height: 100%;
-  background-color: #e63946; /* ඔයාගෙ ප්‍රධාන රතු පාට */
-  border-radius: 3px;
-  transition: width 0.2s ease-out; /* Bar එක පිරෙනකොට ලස්සනට පෙන්වීමට */
+/* Dark mode සඳහා */
+.dark #portfolio-loader {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: #e63946;
 }
 
-/* Dark Mode එකට ගැලපෙන්න */
-.dark .loader-progress-container {
-  background-color: #454545; /* Dark mode background */
+/* Mobile එකේදී ටිකක් කුඩා කිරීම */
+@media (max-width: 767px) {
+  #portfolio-loader {
+    width: 22px;
+    height: 22px;
+    border-width: 2px;
+    margin-left: 10px;
+    top: -2px;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

@@ -455,221 +455,231 @@ var customAllOrder = [
 
 
 
-
-
-
-
-
 // =================================================================================
-// ===== START: PORTFOLIO FILTER + LOAD MORE + PROGRESS BAR (COMBINED) =============
+// ===== START: PORTFOLIO FILTER + LOAD MORE + CUSTOM SORT LOGIC ===================
 // =================================================================================
 
 $(window).on('load', function() {
 
     // Check if the portfolio container exists
     if ($.exists(".cs_isotop_items_details")) {
-
         var $portfolioGrid = $(".cs_isotop_items_details");
         var $filterMenu = $("#portfolio-filter-menu");
         var $loadMoreContainer = $('#load-more-container');
         var $loadMoreBtn = $('#load-more-btn');
-        
-        // --- Loading Bar Elements ---
-        var $progressContainer = $('#image-loader-progress');
-        var $progressBar = $progressContainer.find('.loader-progress-bar');
         
         // --- Load More Settings ---
         var itemsToShowInitially = 12; // මුලින් පෙන්වන ගණන
         var itemsToLoadOnClick = 6;   // Click කළ විට පෙන්වන ගණන
         // --------------------------
 
-        // 1. Show the progress bar
-        $progressContainer.show();
+        
 
-        // 2. Initialize imagesLoaded
-        $portfolioGrid.imagesLoaded()
-            .progress( function( instance, image ) {
-                // Image එකක් load වෙන සැරයක් පාසා % එක ගණනය කිරීම
-                var percent = (instance.progressedCount / instance.images.length) * 100;
-                // Progress bar එකේ width එක update කිරීම
-                $progressBar.css('width', percent + '%');
-            })
-            .always( function( instance ) {
-                // 3. සියලුම images load වූ පසු, progress bar එක සඟවා තැබීම
-                // (තත්පර 0.5ක් තියලා hide කරන්නේ, 100% වුනා කියලා userට දකින්න)
-                $progressContainer.delay(500).fadeOut('slow');
+        // 1. Initialize Isotope Grid Layout first
+        var $isotopeInstance = $portfolioGrid.isotope({
+            itemSelector: '.cs_item',
+            layoutMode: 'fitRows',
+            percentPosition: true,
+            transitionDuration: '0.8s',
+            // --- NEW: Custom sort function එක එකතු කිරීම ---
+            getSortData: {
+              customAll: function(itemElem) {
+                var dataId = $(itemElem).attr('data-id');
+                var index = customAllOrder.indexOf(dataId); // උඩ හදපු array එකෙන් index එක හොයනවා
+                return (index === -1) ? 999 : index; // හම්බුනේ නැත්නම් අන්තිමට දානවා
+              }
+            }
+        });
 
-                // 4. දැන්, සියලුම Isotope, LightGallery සහ Filter logic එක run කිරීම
-                var $isotopeInstance = $portfolioGrid.isotope({
-                    itemSelector: '.cs_item',
-                    layoutMode: 'fitRows',
-                    percentPosition: true,
-                    transitionDuration: '0.8s',
-                    // --- Custom sort function ---
-                    getSortData: {
-                      customAll: function(itemElem) {
-                        var dataId = $(itemElem).attr('data-id');
-                        var index = customAllOrder.indexOf(dataId); 
-                        return (index === -1) ? 999 : index; 
-                      }
-                    }
-                });
-        
-                // --- Load More Management Function ---
-                function manageHiddenItems(filterValue) {
-                    var $items = $portfolioGrid.find('.cs_item');
-                    var $filteredItems;
-                    
-                    if (filterValue === '*') {
-                        var sortedItems = $items.sort(function(a, b) {
-                            var idA = $(a).attr('data-id');
-                            var idB = $(b).attr('data-id');
-                            var indexA = customAllOrder.indexOf(idA);
-                            var indexB = customAllOrder.indexOf(idB);
-                            
-                            if (indexA === -1) indexA = 999;
-                            if (indexB === -1) indexB = 999;
-                            
-                            return indexA - indexB;
-                        });
-                        $filteredItems = sortedItems;
-                    } else {
-                        $filteredItems = $items.filter(filterValue);
-                    }
-                    
-                    $items.addClass('hidden-item');
-                    $filteredItems.slice(0, itemsToShowInitially).removeClass('hidden-item');
-                    
-                    if ($filteredItems.length > itemsToShowInitially) {
-                        $loadMoreContainer.fadeIn();
-                    } else {
-                        $loadMoreContainer.fadeOut();
-                    }
-                }
-        
-                // --- Load More Button Click Handler ---
-                $loadMoreBtn.off('click').on('click', function(e) {
-                    e.preventDefault();
-                    
-                    var activeFilter = $filterMenu.find('li.active').attr('data-filter') || '*';
-                    $isotopeInstance.isotope({ transitionDuration: 0 });
-        
-                    var $hiddenFilteredItems;
-                    if (activeFilter === '*') {
-                        var $hiddenItems = $portfolioGrid.find('.cs_item.hidden-item');
-                        var sortedHiddenItems = $hiddenItems.sort(function(a, b) {
-                            var idA = $(a).attr('data-id');
-                            var idB = $(b).attr('data-id');
-                            var indexA = customAllOrder.indexOf(idA);
-                            var indexB = customAllOrder.indexOf(idB);
-                            if (indexA === -1) indexA = 999;
-                            if (indexB === -1) indexB = 999;
-                            return indexA - indexB;
-                        });
-                        $hiddenFilteredItems = sortedHiddenItems;
-                    } else {
-                        $hiddenFilteredItems = $portfolioGrid.find('.cs_item.hidden-item').filter(activeFilter);
-                    }
-        
-                    var $itemsToReveal = $hiddenFilteredItems.slice(0, itemsToLoadOnClick);
-        
-                    if ($itemsToReveal.length > 0) {
-                        $itemsToReveal.removeClass('hidden-item');
-                    }
-                    
-                    if (activeFilter === '*') {
-                        $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'customAll' });
-                    } else {
-                        $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'original-order' });
-                    }
-                    
-                    if ($hiddenFilteredItems.length <= itemsToLoadOnClick) {
-                        $loadMoreContainer.fadeOut();
-                    }
-        
-                    setTimeout(function() {
-                        $isotopeInstance.isotope({ transitionDuration: '0.8s' });
-                    }, 100); 
-                });
-                
-                // --- LightGallery Popup ---
-                lightGallery(document.getElementById('animated-thumbnails-gallery'), {
-                    selector: '.cs_portfolio',
-                    thumbnail: true,
-                    animateThumb: false,
-                    zoomFromOrigin: false,
-                    allowMediaOverlap: true,
-                    toggleThumb: true,
-                    download: false,
-                    controls: false,
-                    counter: false,
-                    backdropCloseable: true
-                });
-        
-                // --- Category Filter Buttons ---
-                $filterMenu.on('click', 'li', function() {
-                    var $this = $(this);
-                    var filterValue = $this.attr('data-filter');
-                    var newHash = $this.attr('data-hash');
-        
-                    $this.siblings('.active').removeClass('active');
-                    $this.addClass('active');
-        
-                    manageHiddenItems(filterValue); 
-        
-                    if (filterValue === '*') {
-                        $isotopeInstance.isotope({ filter: filterValue, sortBy: 'customAll' });
-                    } else {
-                        $isotopeInstance.isotope({ filter: filterValue, sortBy: 'original-order' });
-                    }
-        
-                    if(history.pushState) {
-                        history.pushState(null, null, '#' + newHash);
-                    } else {
-                        window.location.hash = newHash;
-                    }
-                });
-        
-                // --- Function to read URL hash and trigger filter on page load ---
-                function filterFromHash() {
-                    var hash = window.location.hash.replace('#', '');
-                    var filterValue = '*'; 
-                    var sortByValue = 'customAll'; 
-                    
-                    if (hash && hash !== 'all') {
-                        var $matchingFilter = $filterMenu.find('li[data-hash="' + hash + '"]');
-        
-                        if ($matchingFilter.length > 0) {
-                            filterValue = $matchingFilter.attr('data-filter');
-                            sortByValue = 'original-order'; 
-                            $filterMenu.find('.active').removeClass('active');
-                            $matchingFilter.addClass('active');
-        
-                            var $section = $('#portfolio-grid-section');
-                            if ($section.length > 0) {
-                                $('html, body').animate({
-                                    scrollTop: $section.offset().top - 100
-                                }, 500);
-                            }
-                        }
-                    }
-                    
-                    manageHiddenItems(filterValue);
-                    $isotopeInstance.isotope({ filter: filterValue, sortBy: sortByValue });
-                }
-        
-                // Run the hash filter function on load
-                filterFromHash();
-        
-                // --- 5. (MOBILE FIX) Isotope Layout Refresh FIX for Specific Mobile Devices ---
-                // (ඔයාගෙ අනිත් $(window).on('load') function එකේ තිබ්බ එක මෙතනට ගත්තා)
-                if ($(window).width() < 768) {
-                    setTimeout(function() {
-                        $isotopeInstance.isotope('layout');
-                    }, 300); 
-                }
+        // --- Load More Management Function ---
+        function manageHiddenItems(filterValue) {
+            var $items = $portfolioGrid.find('.cs_item');
+            var $filteredItems;
             
-            }); // <-- imagesLoaded.always() function එක මෙතනින් ඉවරයි
+            // --- MODIFIED: "All" filter එකට custom order එක අනුව $filteredItems සකස් කිරීම ---
+            if (filterValue === '*') {
+                // customAllOrder array එකේ පිලිවෙලට $items ටික sort කරලා අලුත් jQuery object එකක් හදනවා
+                var sortedItems = $items.sort(function(a, b) {
+                    var idA = $(a).attr('data-id');
+                    var idB = $(b).attr('data-id');
+                    var indexA = customAllOrder.indexOf(idA);
+                    var indexB = customAllOrder.indexOf(idB);
+                    
+                    if (indexA === -1) indexA = 999; // හම්බුනේ නැත්නම් අන්තිමට
+                    if (indexB === -1) indexB = 999; // හම්බුනේ නැත්නම් අන්තිමට
+                    
+                    return indexA - indexB;
+                });
+                $filteredItems = sortedItems;
+            } else {
+                // අනිත් filter වලට සාමාන්‍ය විදියට $filteredItems සකස් කිරීම
+                $filteredItems = $items.filter(filterValue);
+            }
+            // ---------------------------------------------------------------------------------
+            
+            // 1. සියලුම items මුලින්ම 'hidden-item' class එක දමා සඟවයි (reset කිරීමට)
+            $items.addClass('hidden-item');
+            
+            // 2. Filter වූ/Sort වූ items වලින්, මුලින් පෙන්විය යුතු ගණන (itemsToShowInitially) නැවත පෙන්වයි.
+            $filteredItems.slice(0, itemsToShowInitially).removeClass('hidden-item');
+            
+            // 3. "Load More" button එක පෙන්වීම හෝ සඟවීම තීරණය කරයි.
+            if ($filteredItems.length > itemsToShowInitially) {
+                $loadMoreContainer.fadeIn();
+            } else {
+                $loadMoreContainer.fadeOut();
+            }
+        }
+
+
+        // --- Load More Button Click Handler (MODIFIED) ---
+        $loadMoreBtn.off('click').on('click', function(e) {
+            e.preventDefault();
+            
+            var activeFilter = $filterMenu.find('li.active').attr('data-filter') || '*';
+
+            // 1. Isotope ට පවසනවා ඊළඟ layout එකේදී කිසිඳු animation එකක් (0s) භාවිතා නොකරන ලෙස.
+            $isotopeInstance.isotope({ transitionDuration: 0 });
+
+            // 2. අලුතින් පෙන්විය යුතු items ටික සොයා ගනී.
+            var $hiddenFilteredItems;
+            
+            // --- MODIFIED: "All" filter එකට custom order එක අනුව $hiddenFilteredItems සකස් කිරීම ---
+            if (activeFilter === '*') {
+                var $hiddenItems = $portfolioGrid.find('.cs_item.hidden-item');
+                // customAllOrder array එකේ පිලිවෙලට $hiddenItems ටික sort කරලා අලුත් jQuery object එකක් හදනවා
+                var sortedHiddenItems = $hiddenItems.sort(function(a, b) {
+                    var idA = $(a).attr('data-id');
+                    var idB = $(b).attr('data-id');
+                    var indexA = customAllOrder.indexOf(idA);
+                    var indexB = customAllOrder.indexOf(idB);
+                    
+                    if (indexA === -1) indexA = 999;
+                    if (indexB === -1) indexB = 999;
+                    
+                    return indexA - indexB;
+                });
+                $hiddenFilteredItems = sortedHiddenItems;
+            } else {
+                 // අනිත් filter වලට සාමාන්‍ය විදියට $hiddenFilteredItems සකස් කිරීම
+                $hiddenFilteredItems = $portfolioGrid.find('.cs_item.hidden-item').filter(activeFilter);
+            }
+            // ---------------------------------------------------------------------------------------
+
+            var $itemsToReveal = $hiddenFilteredItems.slice(0, itemsToLoadOnClick);
+
+            if ($itemsToReveal.length > 0) {
+                // 3. එම items වලින් 'hidden-item' class එක ඉවත් කරයි.
+                $itemsToReveal.removeClass('hidden-item');
+            }
+            
+            // 4. --- MODIFIED: "All" filter එක නම්, custom sort එකත් එක්ක filter run කිරීම ---
+            if (activeFilter === '*') {
+                $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'customAll' });
+            } else {
+                // අනිත් filter වලට sort කිරීමක් නැතුව (default order) filter run කිරීම
+                $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'original-order' });
+            }
+            // ------------------------------------------------------------------------------
+            
+            // 5. Load කිරීමට තව items නැත්නම් button එක සඟවයි.
+            if ($hiddenFilteredItems.length <= itemsToLoadOnClick) {
+                $loadMoreContainer.fadeOut();
+            }
+
+            // 6. Transition වේගය නැවත සාමාන්‍ය (0.8s) අගයට reset කිරීම
+            setTimeout(function() {
+                $isotopeInstance.isotope({ transitionDuration: '0.8s' });
+            }, 100); 
+
+        });
+        
+        
+        // 2. Then, initialize the LightGallery Popup
+        lightGallery(document.getElementById('animated-thumbnails-gallery'), {
+            selector: '.cs_portfolio',
+            thumbnail: true,
+            animateThumb: false,
+            zoomFromOrigin: false,
+            allowMediaOverlap: true,
+            toggleThumb: true,
+            download: false,
+            controls: false,
+            counter: false,
+            backdropCloseable: true
+        });
+
+        // 3. Activate Category Filter Buttons (MODIFIED)
+        $filterMenu.on('click', 'li', function() {
+            var $this = $(this);
+            var filterValue = $this.attr('data-filter');
+            var newHash = $this.attr('data-hash');
+
+            // Update active class
+            $this.siblings('.active').removeClass('active');
+            $this.addClass('active');
+
+            // 1. Call the load-more manager to reset hidden items
+            manageHiddenItems(filterValue); 
+
+            // 2. --- MODIFIED: "All" filter එක නම්, custom sort එකත් එක්ක filter run කිරීම ---
+            if (filterValue === '*') {
+                $isotopeInstance.isotope({ filter: filterValue, sortBy: 'customAll' });
+            } else {
+                // අනිත් filter වලට sort කිරීමක් නැතුව (default order) filter run කිරීම
+                $isotopeInstance.isotope({ filter: filterValue, sortBy: 'original-order' });
+            }
+            // ------------------------------------------------------------------------------
+
+            // Update URL hash without jumping
+            if(history.pushState) {
+                history.pushState(null, null, '#' + newHash);
+            } else {
+                window.location.hash = newHash;
+            }
+        });
+
+        // 4. Function to read URL hash and trigger filter on page load (MODIFIED)
+        function filterFromHash() {
+            var hash = window.location.hash.replace('#', '');
+            var filterValue = '*'; // Default filter
+            var sortByValue = 'customAll'; // "All" filter එකට default sort එක
+            
+            if (hash && hash !== 'all') {
+                var $matchingFilter = $filterMenu.find('li[data-hash="' + hash + '"]');
+
+                if ($matchingFilter.length > 0) {
+                    // Found a matching filter
+                    filterValue = $matchingFilter.attr('data-filter');
+                    sortByValue = 'original-order'; // අනිත් filter වලට default sort එක
+
+                    // Update active class
+                    $filterMenu.find('.active').removeClass('active');
+                    $matchingFilter.addClass('active');
+
+                    // Scroll to the portfolio section
+                    var $section = $('#portfolio-grid-section');
+                    if ($section.length > 0) {
+                        $('html, body').animate({
+                            scrollTop: $section.offset().top - 100 // -100 for sticky header offset
+                        }, 500);
+                    }
+                }
+            }
+            
+            // --- MODIFIED: Page load එකේදීම අදාළ filter සහ sort එක apply කිරීම ---
+            manageHiddenItems(filterValue);
+            $isotopeInstance.isotope({ filter: filterValue, sortBy: sortByValue });
+            // --------------------------------------------------------------------
+        }
+
+        // Run the hash filter function on load
+        filterFromHash();
+
+        // Failsafe layout for tricky devices
+        setTimeout(function() {
+            $isotopeInstance.isotope('layout');
+        }, 300); // Increased delay for safety
     }
 
     // Initialize the other isotope instance if it exists
@@ -685,7 +695,7 @@ $(window).on('load', function() {
 });
 
 // =================================================================================
-// ===== END: PORTFOLIO FILTER + LOAD MORE + PROGRESS BAR (COMBINED) ===============
+// ===== END: PORTFOLIO FILTER + LOAD MORE LOGIC ===================================
 // =================================================================================
 
 
