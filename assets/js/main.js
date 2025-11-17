@@ -301,67 +301,6 @@
  --------------------------------------------------------------*/
 
 
-
-
-// --- Consolidated Portfolio Initialization (FIX FOR ALL ISSUES) ---
-
-// function isotopInit() {
-//     // This function will now be empty, as we are moving its logic
-// }
-
-// $(window).on('load', function() {
-//     // Check if the portfolio container exists
-//     if ($.exists(".cs_isotop_items_details")) {
-//         var $portfolioGrid = $(".cs_isotop_items_details");
-
-//         // 1. Initialize Isotope Grid Layout first
-//         var $isotopeInstance = $portfolioGrid.isotope({
-//             itemSelector: '.cs_item',
-//             layoutMode: 'fitRows',
-//             percentPosition: true
-//         });
-
-//         // 2. Then, initialize the LightGallery Popup
-//         lightGallery(document.getElementById('animated-thumbnails-gallery'), {
-//             selector: '.cs_portfolio',
-//             thumbnail: true,
-//             animateThumb: false,
-//             zoomFromOrigin: false,
-//             allowMediaOverlap: true,
-//             toggleThumb: true,
-//             download: false,
-//             controls: false,
-//             counter: false,
-//             backdropCloseable: true
-//         });
-
-//         // 3. Finally, activate the Category Filter Buttons
-//         $('.cs_isotop_item_menu').on('click', 'li', function() {
-//             var filterValue = $(this).attr('data-filter');
-//             $(this).siblings('.active').removeClass('active');
-//             $(this).addClass('active');
-//             $isotopeInstance.isotope({ filter: filterValue });
-//         });
-        
-//         // Failsafe to ensure layout is correct on tricky devices like the Pixel 5
-//         setTimeout(function() {
-//             $isotopeInstance.isotope('layout');
-//         }, 100);
-//     }
-
-//     // Initialize the other isotope instance if it exists
-//     if ($.exists(".cs_creative_protfolio_details")) {
-//         var $creative_protfolio = $(".cs_creative_protfolio_details").isotope({});
-//         $(".cs_creative_protfolio_menu").on("click", "li", function () {
-//             var filterValue = $(this).attr("data-filter");
-//             $creative_protfolio.isotope({
-//                 filter: filterValue,
-//             });
-//         });
-//     }
-// });
-
-
 // --- Consolidated Portfolio Initialization (with URL Hash Filtering) ---
 
 function isotopInit() {
@@ -459,7 +398,8 @@ var customAllOrder = [
 // ===== START: PORTFOLIO FILTER + LOAD MORE + CUSTOM SORT LOGIC ===================
 // =================================================================================
 
-$(window).on('load', function() {
+// $(window).on('load', function() {
+$(document).ready(function() {
 
     // Check if the portfolio container exists
     if ($.exists(".cs_isotop_items_details")) {
