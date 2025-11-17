@@ -465,10 +465,12 @@ var customAllOrder = [
 
 
 // =================================================================================
-// ===== START: PORTFOLIO FILTER + LOAD MORE + PROGRESS LOADER (FINAL FIX) =========
+// ===== START: PORTFOLIO FILTER + LOAD MORE + PROGRESS (FINAL JS) ===============
 // =================================================================================
 
-$(window).on('load', function() {
+// $(window).on('load') වෙනුවට $(document).ready() භාවිතා කිරීම
+// මෙය පිටුව load වීමට පෙර ක්‍රියාත්මක වී, progress bar එකට ඉඩ සලසයි.
+$(document).ready(function() {
 
     // Check if the portfolio container exists
     if ($.exists(".cs_isotop_items_details")) {
@@ -482,10 +484,11 @@ $(window).on('load', function() {
         var $percentageText = $('#portfolio-percentage');
 
         // --- Load More Settings ---
-        var itemsToShowInitially = 12; 
-        var itemsToLoadOnClick = 6;   
+        var itemsToShowInitially = 12;
+        var itemsToLoadOnClick = 6;
         
         // --- 1. Initialize Isotope Grid Layout ---
+        // Isotope මෙතන initialize කිරීමෙන්, imagesLoaded එකට එය track කළ හැක
         var $isotopeInstance = $portfolioGrid.isotope({
             itemSelector: '.cs_item',
             layoutMode: 'fitRows',
@@ -494,187 +497,186 @@ $(window).on('load', function() {
             getSortData: {
               customAll: function(itemElem) {
                 var dataId = $(itemElem).attr('data-id');
-                var index = customAllOrder.indexOf(dataId); 
-                return (index === -1) ? 999 : index; 
+                var index = customAllOrder.indexOf(dataId);
+                return (index === -1) ? 999 : index;
               }
             }
         });
-
-        // --- 2. Initialize LightGallery ---
-        lightGallery(document.getElementById('animated-thumbnails-gallery'), {
-            selector: '.cs_portfolio',
-            thumbnail: true,
-            animateThumb: false,
-            zoomFromOrigin: false,
-            allowMediaOverlap: true,
-            toggleThumb: true,
-            download: false,
-            controls: false,
-            counter: false,
-            backdropCloseable: true
-        });
-
-        // --- 3. Define Core Functions ---
-
-        // Function: Manages hiding/showing items for Load More
-        function manageHiddenItems(filterValue) {
-            var $items = $portfolioGrid.find('.cs_item');
-            var $filteredItems;
-            
-            if (filterValue === '*') {
-                var sortedItems = $items.sort(function(a, b) {
-                    var idA = $(a).attr('data-id');
-                    var idB = $(b).attr('data-id');
-                    var indexA = customAllOrder.indexOf(idA);
-                    var indexB = customAllOrder.indexOf(idB);
-                    if (indexA === -1) indexA = 999;
-                    if (indexB === -1) indexB = 999;
-                    return indexA - indexB;
-                });
-                $filteredItems = sortedItems;
-            } else {
-                $filteredItems = $items.filter(filterValue);
-            }
-            
-            $items.addClass('hidden-item');
-            $filteredItems.slice(0, itemsToShowInitially).removeClass('hidden-item');
-            
-            if ($filteredItems.length > itemsToShowInitially) {
-                $loadMoreContainer.fadeIn();
-            } else {
-                $loadMoreContainer.fadeOut();
-            }
-        }
-
-        // Function: Handles Load More Button Click
-        function handleLoadMoreClick(e) {
-            e.preventDefault();
-            var activeFilter = $filterMenu.find('li.active').attr('data-filter') || '*';
-            $isotopeInstance.isotope({ transitionDuration: 0 });
-
-            var $hiddenFilteredItems;
-            if (activeFilter === '*') {
-                var $hiddenItems = $portfolioGrid.find('.cs_item.hidden-item');
-                var sortedHiddenItems = $hiddenItems.sort(function(a, b) {
-                    var idA = $(a).attr('data-id');
-                    var idB = $(b).attr('data-id');
-                    var indexA = customAllOrder.indexOf(idA);
-                    var indexB = customAllOrder.indexOf(idB);
-                    if (indexA === -1) indexA = 999;
-                    if (indexB === -1) indexB = 999;
-                    return indexA - indexB;
-                });
-                $hiddenFilteredItems = sortedHiddenItems;
-            } else {
-                $hiddenFilteredItems = $portfolioGrid.find('.cs_item.hidden-item').filter(activeFilter);
-            }
-
-            var $itemsToReveal = $hiddenFilteredItems.slice(0, itemsToLoadOnClick);
-            if ($itemsToReveal.length > 0) {
-                $itemsToReveal.removeClass('hidden-item');
-            }
-            
-            if (activeFilter === '*') {
-                $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'customAll' });
-            } else {
-                $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'original-order' });
-            }
-            
-            if ($hiddenFilteredItems.length <= itemsToLoadOnClick) {
-                $loadMoreContainer.fadeOut();
-            }
-
-            setTimeout(function() {
-                $isotopeInstance.isotope({ transitionDuration: '0.8s' });
-            }, 100); 
-        }
-
-        // Function: Handles Filter Menu Click
-        function handleFilterClick(e) {
-            e.preventDefault(); // Prevent default link behavior
-            var $this = $(this);
-            var filterValue = $this.attr('data-filter');
-            var newHash = $this.attr('data-hash');
-
-            $this.siblings('.active').removeClass('active');
-            $this.addClass('active');
-
-            manageHiddenItems(filterValue); 
-
-            if (filterValue === '*') {
-                $isotopeInstance.isotope({ filter: filterValue, sortBy: 'customAll' });
-            } else {
-                $isotopeInstance.isotope({ filter: filterValue, sortBy: 'original-order' });
-            }
-
-            if(history.pushState) {
-                history.pushState(null, null, '#' + newHash);
-            } else {
-                window.location.hash = newHash;
-            }
-        }
         
-        // Function: Reads URL Hash to set initial filter
-        function filterFromHash(isInitialLoad) {
-            var hash = window.location.hash.replace('#', '');
-            var filterValue = '*';
-            var sortByValue = 'customAll'; 
-            
-            if (hash && hash !== 'all') {
-                var $matchingFilter = $filterMenu.find('li[data-hash="' + hash + '"]');
-                if ($matchingFilter.length > 0) {
-                    filterValue = $matchingFilter.attr('data-filter');
-                    sortByValue = 'original-order';
-                    $filterMenu.find('.active').removeClass('active');
-                    $matchingFilter.addClass('active');
-
-                    // Scroll to section only on initial load
-                    if (isInitialLoad) {
-                        var $section = $('#portfolio-grid-section');
-                        if ($section.length > 0) {
-                            $('html, body').animate({
-                                scrollTop: $section.offset().top - 100
-                            }, 500);
-                        }
-                    }
-                }
-            }
-            
-            manageHiddenItems(filterValue);
-            $isotopeInstance.isotope({ filter: filterValue, sortBy: sortByValue });
-        }
-
-        // --- 4. Attach Click Handlers IMMEDIATELY ---
-        $loadMoreBtn.off('click').on('click', handleLoadMoreClick);
-        $filterMenu.off('click').on('click', 'li', handleFilterClick);
-
-
-        // --- 5. Use imagesLoaded to track progress AND trigger initial layout ---
+        // --- 2. Initialize imagesLoaded to track progress ---
         var imgLoad = $isotopeInstance.imagesLoaded();
         var totalImages = imgLoad.images.length;
         var loadedImages = 0;
 
-        // Update percentage on 'progress'
+        // --- 3. Update percentage on 'progress' ---
         imgLoad.on('progress', function(instance, image) {
             loadedImages++;
             var percent = Math.floor((loadedImages / totalImages) * 100);
             $percentageText.text(percent + '%');
         });
 
-        // Run setup code ONLY after ALL images are loaded
+        // --- 4. Run ALL setup logic ONLY after ALL images are loaded ---
         imgLoad.on('always', function(instance) {
             
-            // 1. Hide the loader
+            // --- A. Hide the loader ---
             $percentageText.text('100%');
             setTimeout(function() {
                 $loader.fadeOut(500);
                 $percentageText.fadeOut(500);
-            }, 250); // Show 100% briefly before hiding
+            }, 250); // Show 100% briefly
 
-            // 2. Run the initial filter setup based on URL hash
-            filterFromHash(true); // 'true' indicates it's the initial load
+            // --- B. Define Core Functions ---
 
-            // 3. Failsafe layout for tricky devices
+            // Function: Manages hiding/showing items for Load More
+            function manageHiddenItems(filterValue) {
+                var $items = $portfolioGrid.find('.cs_item');
+                var $filteredItems;
+                
+                if (filterValue === '*') {
+                    var sortedItems = $items.sort(function(a, b) {
+                        var idA = $(a).attr('data-id');
+                        var idB = $(b).attr('data-id');
+                        var indexA = customAllOrder.indexOf(idA);
+                        var indexB = customAllOrder.indexOf(idB);
+                        if (indexA === -1) indexA = 999;
+                        if (indexB === -1) indexB = 999;
+                        return indexA - indexB;
+                    });
+                    $filteredItems = sortedItems;
+                } else {
+                    $filteredItems = $items.filter(filterValue);
+                }
+                
+                $items.addClass('hidden-item');
+                $filteredItems.slice(0, itemsToShowInitially).removeClass('hidden-item');
+                
+                if ($filteredItems.length > itemsToShowInitially) {
+                    $loadMoreContainer.fadeIn();
+                } else {
+                    $loadMoreContainer.fadeOut();
+                }
+            }
+
+            // Function: Handles Load More Button Click
+            function handleLoadMoreClick(e) {
+                e.preventDefault();
+                var activeFilter = $filterMenu.find('li.active').attr('data-filter') || '*';
+                $isotopeInstance.isotope({ transitionDuration: 0 });
+
+                var $hiddenFilteredItems;
+                if (activeFilter === '*') {
+                    var $hiddenItems = $portfolioGrid.find('.cs_item.hidden-item');
+                    var sortedHiddenItems = $hiddenItems.sort(function(a, b) {
+                        var idA = $(a).attr('data-id');
+                        var idB = $(b).attr('data-id');
+                        var indexA = customAllOrder.indexOf(idA);
+                        var indexB = customAllOrder.indexOf(idB);
+                        if (indexA === -1) indexA = 999;
+                        if (indexB === -1) indexB = 999;
+                        return indexA - indexB;
+                    });
+                    $hiddenFilteredItems = sortedHiddenItems;
+                } else {
+                    $hiddenFilteredItems = $portfolioGrid.find('.cs_item.hidden-item').filter(activeFilter);
+                }
+
+                var $itemsToReveal = $hiddenFilteredItems.slice(0, itemsToLoadOnClick);
+                if ($itemsToReveal.length > 0) {
+                    $itemsToReveal.removeClass('hidden-item');
+                }
+                
+                if (activeFilter === '*') {
+                    $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'customAll' });
+                } else {
+                    $isotopeInstance.isotope({ filter: activeFilter, sortBy: 'original-order' });
+                }
+                
+                if ($hiddenFilteredItems.length <= itemsToLoadOnClick) {
+                    $loadMoreContainer.fadeOut();
+                }
+
+                setTimeout(function() {
+                    $isotopeInstance.isotope({ transitionDuration: '0.8s' });
+                }, 100); 
+            }
+
+            // Function: Handles Filter Menu Click
+            function handleFilterClick(e) {
+                e.preventDefault(); 
+                var $this = $(this);
+                var filterValue = $this.attr('data-filter');
+                var newHash = $this.attr('data-hash');
+
+                $this.siblings('.active').removeClass('active');
+                $this.addClass('active');
+
+                manageHiddenItems(filterValue); 
+
+                if (filterValue === '*') {
+                    $isotopeInstance.isotope({ filter: filterValue, sortBy: 'customAll' });
+                } else {
+                    $isotopeInstance.isotope({ filter: filterValue, sortBy: 'original-order' });
+                }
+
+                if(history.pushState) {
+                    history.pushState(null, null, '#' + newHash);
+                } else {
+                    window.location.hash = newHash;
+                }
+            }
+            
+            // Function: Reads URL Hash to set initial filter
+            function filterFromHash(isInitialLoad) {
+                var hash = window.location.hash.replace('#', '');
+                var filterValue = '*';
+                var sortByValue = 'customAll'; 
+                
+                if (hash && hash !== 'all') {
+                    var $matchingFilter = $filterMenu.find('li[data-hash="' + hash + '"]');
+                    if ($matchingFilter.length > 0) {
+                        filterValue = $matchingFilter.attr('data-filter');
+                        sortByValue = 'original-order';
+                        $filterMenu.find('.active').removeClass('active');
+                        $matchingFilter.addClass('active');
+
+                        if (isInitialLoad) {
+                            var $section = $('#portfolio-grid-section');
+                            if ($section.length > 0) {
+                                $('html, body').animate({
+                                    scrollTop: $section.offset().top - 100
+                                }, 500);
+                            }
+                        }
+                    }
+                }
+                
+                // --- Initial setup ---
+                manageHiddenItems(filterValue);
+                $isotopeInstance.isotope({ filter: filterValue, sortBy: sortByValue });
+            }
+
+            // --- C. Initialize LightGallery ---
+            lightGallery(document.getElementById('animated-thumbnails-gallery'), {
+                selector: '.cs_portfolio',
+                thumbnail: true,
+                animateThumb: false,
+                zoomFromOrigin: false,
+                allowMediaOverlap: true,
+                toggleThumb: true,
+                download: false,
+                controls: false,
+                counter: false,
+                backdropCloseable: true
+            });
+
+            // --- D. Attach Click Handlers ---
+            $loadMoreBtn.off('click').on('click', handleLoadMoreClick);
+            $filterMenu.off('click').on('click', 'li', handleFilterClick);
+            
+            // --- E. Run the initial filter setup ---
+            filterFromHash(true); // 'true' = initial page load
+
+            // --- F. Failsafe layout ---
             setTimeout(function() {
                 $isotopeInstance.isotope('layout');
             }, 300); 
@@ -695,9 +697,8 @@ $(window).on('load', function() {
         });
     }
 });
-
 // =================================================================================
-// ===== END: PORTFOLIO FILTER + LOAD MORE LOGIC (FINAL FIX) =======================
+// ===== END: PORTFOLIO FILTER + LOAD MORE + PROGRESS (FINAL JS) ===================
 // =================================================================================
 
 
