@@ -1331,7 +1331,13 @@ a[data-social="Instagram"]:hover::after {
 
 
 
-/* --- Portfolio Loading Indicator (Manual Preload) --- */
+
+
+
+
+
+
+/* --- Portfolio Loading Indicator (Final Version) --- */
 #portfolio-loader {
   display: inline-block;
   width: 30px;
@@ -1345,7 +1351,7 @@ a[data-social="Instagram"]:hover::after {
   position: relative;
   top: -4px;
   transition: opacity 0.5s ease;
-  opacity: 1; /* මුලින් පෙන්වීම */
+  opacity: 1; 
 }
 
 #portfolio-percentage {
@@ -1360,7 +1366,7 @@ a[data-social="Instagram"]:hover::after {
   transition: opacity 0.5s ease, color 0.3s ease;
   min-width: 55px;
   text-align: left;
-  opacity: 1; /* මුලින් පෙන්වීම */
+  opacity: 1; 
 }
 
 /* Dark mode */
