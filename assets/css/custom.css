@@ -232,13 +232,13 @@
 /* 4. Footer Section: Email Text Size එක කුඩා කිරීම */
 /* ====================================================== */
 .cs_footer_info a.cs_primary_font span {
-  font-size: 34px !important;
+  font-size: 35px !important;
   line-height: 1 !important; 
 }
 
 @media (max-width: 767px) {
   .cs_footer_info a.cs_primary_font span {
-    font-size: 20px !important;
+    font-size: 25px !important;
     line-height: 1.4 !important;
   }
 }
