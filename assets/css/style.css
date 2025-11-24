@@ -4633,7 +4633,7 @@ label {
 }
 
 .cs_hero.cs_style2 .cs_hero_text .cs_hero_subtitle .cs_hero_mini_details {
-    padding-left: 15px;
+    padding-left: 25px;
     font-size: 30px;
     font-weight: 400;
     color: #fff;
@@ -4644,11 +4644,70 @@ label {
 }
 
 .cs_hero.cs_style2 .cs_hero_title.cs_hero_title_lg {
-    font-size: 150px;
+    font-size: 140px;
     font-weight: 900;
     margin-bottom: 0;
     line-height: 155px;
 }
+
+
+/* Laptop screens වලදී (1600px ට වඩා අඩු) Hero Title එකේ size එක අඩු කිරීම */
+@media screen and (max-width: 1600px) {
+    .cs_hero.cs_style2 .cs_hero_title.cs_hero_title_lg {
+        font-size: 110px; /* Desktop එකේ 150px තිබුනා, ලැප්ටොප් වලට 110px කළා */
+        line-height: 115px; /* Line height එකත් ඊට සමාන්තරව අඩු කළා */
+        padding-left: 40px;
+        font-weight: 900;
+        margin-bottom: 0;
+    }
+
+    .cs_hero.cs_style2 .cs_hero_text .cs_hero_subtitle .cs_hero_mini_details {
+    padding-left: 40px;
+    font-size: 30px;
+    font-weight: 400;
+    color: #fff;
+}
+}
+
+
+/* Mobile Devices (767px ට වඩා අඩු) */
+@media screen and (max-width: 767px) {
+    
+    /* 1. Mobile Banner එක (Light Mode - Default) */
+    #hero_banner {
+        background-image: url('/assets/img/design_banner_2.png') !important;
+        background-position: center top; 
+        background-size: cover;
+    }
+
+    /* 2. Mobile Banner එක (Dark Mode) */
+    .dark #hero_banner {
+        background-image: url('/assets/img/design_banner_2_dark.png') !important;
+    }
+
+    /* 3. Hero Title එක Mobile එකට සකස් කිරීම */
+    .cs_hero.cs_style2 .cs_hero_title.cs_hero_title_lg {
+        font-size: 55px;      
+        line-height: 65px;    
+        padding-left: 15px;
+    }
+
+    /* 4. Subtitle එක Mobile එකට සකස් කිරීම */
+    .cs_hero.cs_style2 .cs_hero_text .cs_hero_subtitle .cs_hero_mini_details {
+        font-size: 18px;      
+        padding-left: 15px;
+    }
+
+    /* 5. View Project Button එක Mobile එකට සකස් කිරීම */
+    .cs_hero.cs_style2 .cs_section_heading_right {
+        padding-left: 20px;
+    }
+}
+
+
+
+
+
 
 .cs_hero.cs_style2 .textupdowns {
     animation: textupdown 4s ease-in-out infinite;
